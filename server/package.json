@@ -1,12 +1,20 @@
 {
   "name": "server",
   "version": "1.0.0",
+  "description": "MY FIRST MERN PROJECT",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "NodeJs",
+    "ExpressJs",
+    "MongoDB"
+  ],
+  "author": "Ansh Gupta",
   "license": "ISC",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
 }

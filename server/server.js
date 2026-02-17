@@ -1,55 +1,53 @@
-import { on } from 'events';
 import http from 'http';
-import os, { freemem } from 'os';
-const port = 4001;
-let body = "";
-const data = [];
+import os from 'os';
+
+const port = 5001;
+
 const server = http.createServer((req, res) => {
-
     const url = req.url;
-    if (url === '/' && req.method === 'GET') {
-        res.end("<h1>Home Page</h1>");
-    }
-    else if (url === '/about' && req.method === 'GET') {
-        res.end("<h1>About Page</h1>");
-    }
-    else if (url === '/contact' && req.method === 'GET') {
-        res.end("<h1>Contact Page</h1>");
-    }
-    else if (url === '/system' && req.method === 'GET') {
-        const sysdata = {
-            platform: os.platform(),
-            arch: os.arch(),
-            cpu: os.cpus().length,
-            Totalmem: os.totalmem()/1024**3 + " GB",
-            freemem: os.freemem()/1024**3 + " GB",
-        }
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(sysdata));
-    }
-    else if (url === '/senddata' && req.method === 'POST') {
+    const method = req.method;
 
-        req.on('data', (chunk) => {
-            body = body + chunk;
-        })
-        req.on('end', () => {
-            res.statusCode = 201;
-            console.log(body, "data send");
-            data.push(body);
-            res.end(JSON.stringify(data));
-        })
+    if (url === '/' && method === 'GET') {
+        res.write("Home Page");
+        res.end();
     }
-    else if (url === "/viewdata" && req.method === "GET") {
-        res.setHeader("Content-Type", "application/json");
-        res.end(JSON.stringify(data));
+    else if (url === '/contact' && method === 'GET') {
+        res.write("Contact Page");
+        res.end();
+    }
+    else if (url === '/system' && method === 'GET') {
+        const sysdata = {
+            operstingSystem: os.platform(),
+            Architecture: os.arch(),
+            cpuLength: os.cpus().length,
+            TotalMemory: (os.totalmem()/1024**3).toFixed(2) + "GB",
+            FreeMemory: (os.freemem()/1024**3).toFixed(2) + "GB",
+            // network : os.networkInterfaces()
+        }
+        res.write(JSON.stringify(sysdata));
+        res.end();
+    }
+    else if (url === '/createuser' && method === 'POST') {
+        res.write("Create User");
+        res.end();
+    }
+    else if (url.startsWith("/users/") && method === 'GET') {
+        res.write("Search User");
+        res.end();
+    }
+    else if (url.startsWith("/users/") && method === 'PUT') {
+        res.write("Update User");
+        res.end();
+    }
+    else if (url.startsWith("/users/") && method === 'DELETE') {
+        res.write("Delete User");
+        res.end();
     }
     else {
-        res.statusCode = 404;
-        res.end("<h1>Page Not Found</h1>");
+        res.write("Error Page");
+        res.end();
     }
-    // res.end();
 })
-
 server.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 })
